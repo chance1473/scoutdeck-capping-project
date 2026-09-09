@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Prospect {
+  id                String   @id @default(cuid())
+  name              String
+  position          String   // e.g. "SS", "RHP", "CF", "C", "3B"
+  secondaryPosition String?
+  bats              String   // "R", "L", "S"
+  throws            String   // "R", "L"
+  height            String   // e.g. "6'2\""
+  weight            Int      // lbs e.g. 200
+  school            String   // e.g. "Corona HS (CA)" or "LSU"
+  schoolType        String   // "HIGH_SCHOOL" or "COLLEGE"
+  gradYear          Int      // e.g. 2025, 2026
+  status            String   @default("WATCHLIST") // "TOP_TARGET", "OFFERED", "WATCHLIST", "COMMITTED", "SIGNED"
+  commitment        String?  // e.g. "LSU", "Vanderbilt", "Tennessee"
+  draftProjection   String?  // e.g. "Top 10 Pick", "Round 1 (Pick 15-25)", "Round 2"
+  proComp           String?  // e.g. "Corey Seager", "Paul Skenes"
+  summary           String?
+  avatarUrl         String?
+  tags              String?  // Comma-separated: "Plus Bat Speed, 5-Tool Potential, Elite Arm"
+
+  // Statcast & Showcase Metrics
+  exitVelocityMax   Float?   // mph e.g. 106.8
+  sixtyTime         Float?   // seconds e.g. 6.45
+  popTime           Float?   // seconds e.g. 1.85 (Catchers)
+  fastballVeloPeak  Float?   // mph e.g. 98.5 (Pitchers)
+  fastballVeloSit   Float?   // mph e.g. 94.5 (Pitchers)
+  spinRate          Int?     // rpm e.g. 2550
+
+  // 20-80 Tool Grades (Position Players)
+  hitPresent        Int      @default(30)
+  hitFuture         Int      @default(50)
+  powerPresent      Int      @default(30)
+  powerFuture       Int      @default(50)
+  runPresent        Int      @default(50)
+  runFuture         Int      @default(50)
+  armPresent        Int      @default(50)
+  armFuture         Int      @default(50)
+  fieldPresent      Int      @default(45)
+  fieldFuture       Int      @default(55)
+
+  // 20-80 Pitch Grades (Pitchers)
+  fastballPresent   Int?
+  fastballFuture    Int?
+  sliderPresent     Int?
+  sliderFuture      Int?
+  curveballPresent  Int?
+  curveballFuture   Int?
+  changeupPresent   Int?
+  changeupFuture    Int?
+  commandPresent    Int?
+  commandFuture     Int?
+
+  // Overall Future Potential (OFP)
+  ofpScore          Int      @default(50) // 20-80 scale
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  reports           ScoutingReport[]
+}
+
+model ScoutingReport {
+  id          String   @id @default(cuid())
+  prospectId  String
+  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  scoutName   String
+  eventName   String   // e.g. "Area Code Games", "PG National", "Cape Cod League"
+  date        DateTime @default(now())
+  summary     String
+  strengths   String
+  weaknesses  String
+  videoUrl    String?
+  grade       Int?     // 20-80 grade assigned in this report
+  createdAt   DateTime @default(now())
+}
