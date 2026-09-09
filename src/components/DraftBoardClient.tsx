@@ -136,12 +136,19 @@ export default function DraftBoardClient({ initialProspects }: DraftBoardClientP
 
       {/* Filter and Search Bar */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
-        <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+        <div 
+          suppressHydrationWarning 
+          className="flex flex-col md:flex-row gap-3 items-center justify-between"
+        >
           {/* Search box */}
-          <div className="relative w-full md:w-96">
+          <div className="relative w-full md:w-96" suppressHydrationWarning>
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
-              type="text"
+              type="search"
+              autoComplete="off"
+              data-1p-ignore
+              data-protonpass-ignore="true"
+              suppressHydrationWarning
               placeholder="Search by prospect name, school, position, or comp..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
