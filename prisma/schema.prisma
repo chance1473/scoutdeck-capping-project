@@ -27,6 +27,19 @@ model Prospect {
   avatarUrl         String?
   tags              String?  // Comma-separated: "Plus Bat Speed, 5-Tool Potential, Elite Arm"
 
+  // MLB Stats API identity. These fields are synchronized independently from
+  // ScoutDeck's private grades and reports so an import never overwrites analysis.
+  mlbId             Int?     @unique
+  currentTeamId     Int?
+  currentTeamName   String?
+  rosterStatus      String?
+  birthDate         String?
+  age               Int?
+  debutDate         String?
+  active            Boolean  @default(false)
+  dataSource        String   @default("SCOUTDECK")
+  mlbSyncedAt       DateTime?
+
   // Statcast & Showcase Metrics
   exitVelocityMax   Float?   // mph e.g. 106.8
   sixtyTime         Float?   // seconds e.g. 6.45
@@ -66,6 +79,19 @@ model Prospect {
   updatedAt         DateTime @updatedAt
 
   reports           ScoutingReport[]
+  statLines         MlbStatLine[]
+}
+
+model MlbStatLine {
+  id          String   @id @default(cuid())
+  prospectId  String
+  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  season      Int
+  group       String   // "hitting" or "pitching"
+  statsJson   String
+  syncedAt    DateTime @default(now())
+
+  @@unique([prospectId, season, group])
 }
 
 model ScoutingReport {

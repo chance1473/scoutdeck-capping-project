@@ -1,19 +1,20 @@
-# ⚾ ScoutDeck: Baseball Scouting & Draft War Room
+# ⚾ ScoutDeck: MLB Scouting & Player Intelligence
 
 > Built for the **Cybersecurity Capping Project: Passo, by PyxCloud** (Phase 1 Test Bed).
 
-**ScoutDeck** is a high-performance amateur baseball scouting and draft-room platform. It provides scouts, crosscheckers, and front-office analysts with an end-to-end environment to evaluate high school and college prospects, track recruitment pipelines, visualize **20–80 tool projections** via interactive radar charts, analyze **Statcast showcase metrics**, and compare draft targets head-to-head.
+**ScoutDeck** is a professional baseball scouting platform built around current MLB rosters and season statistics. It combines validated data from MLB Stats API with private, scout-authored **20–80 evaluations**, observation reports, comparisons, and printable player dossiers.
 
 ---
 
 ## 🌟 Key Features
 
-* **Draft Board / War Room:** Filterable, searchable war-room board supporting position groupings (Pitchers, Infield, Outfield, Catchers), class years ('25, '26), and recruitment status (`Top Target`, `Offered`, `Watchlist`, `Committed`, `Signed`).
+* **Live MLB Directory:** Browse current organizations and 40-man rosters, then synchronize an entire roster or an individual player into ScoutDeck.
+* **Professional Scouting Board:** Filter imported MLB players by organization and position while tracking report coverage and synchronized stat lines.
 * **20–80 Major League Scouting Scale:** Full support for industry-standard Present vs. Future grades (Hit, Power, Run, Arm, Field for position players; Fastball, Slider, Curveball, Changeup, Command for pitchers) with automated **Overall Future Potential (OFP)** composite calculations.
 * **Interactive 5-Axis Radar Chart:** Responsive, mathematically calibrated SVG polygon visualizer plotting Present and Future tool trajectories against the 50 (MLB Average) baseline.
-* **Statcast Combine & Showcase Analytics:** Track verified metrics including Exit Velocity Max (mph), 60-Yard Dash times, Catcher Pop Times, Fastball Peak & Sitting Velocities, and Trackman Spin Rates.
-* **Head-to-Head Compare Engine:** Select any two prospects to render an overlay radar comparison and automated attribute delta tables.
-* **Field Observation Logs:** Chronological scouting reports filed by scouts at showcases (Area Code Games, PG National, Cape Cod League, CWS) with narrative summaries, strengths, weaknesses, and film breakdown links.
+* **Live Season Statistics:** Store validated hitting and pitching stat snapshots independently from private scouting analysis.
+* **Head-to-Head Compare Engine:** Select any two MLB players to render an overlay radar comparison and automated attribute delta tables.
+* **Professional Observation Logs:** Chronological reports with narrative summaries, strengths, weaknesses, grades, and film links.
 * **Printable Scouting Dossier:** Built-in print media layout to export clean, single-sheet scouting cards.
 
 ---
@@ -35,12 +36,12 @@
 npm install
 ```
 
-### 2. Initialize Database & Seed Sample Prospects
+### 2. Initialize the Database
 ```bash
 # Push schema to SQLite database
 npx prisma db push
 
-# Seed realistic draft prospects and field reports
+# The seed task adds no fictional players; use /mlb to sync live rosters
 npm run prisma:seed
 ```
 

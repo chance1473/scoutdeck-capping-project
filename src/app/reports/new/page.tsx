@@ -11,6 +11,7 @@ export default async function NewReportPage({ searchParams }: NewReportPageProps
   const { prospectId } = await searchParams;
 
   const prospects = await prisma.prospect.findMany({
+    where: { mlbId: { not: null } },
     orderBy: { name: "asc" },
     select: {
       id: true,

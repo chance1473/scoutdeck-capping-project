@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "ScoutDeck | Baseball Scouting & Draft War Room",
-  description: "Modern amateur baseball prospect evaluation, 20-80 scale scouting, and Statcast metrics analytics.",
+  title: "ScoutDeck | Professional Baseball Scouting",
+  description: "Current MLB player data, professional scouting reports, and 20-80 evaluation tools.",
 };
 
 export default function RootLayout({

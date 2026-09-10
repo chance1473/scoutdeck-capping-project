@@ -6,9 +6,8 @@ import {
   Trophy, 
   Users, 
   GitCompare, 
-  UserPlus, 
   FileEdit,
-  Activity,
+  Database,
   Calendar
 } from "lucide-react";
 
@@ -16,9 +15,9 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/", label: "Draft Board", icon: Users },
-    { href: "/compare", label: "Head-to-Head Compare", icon: GitCompare },
-    { href: "/prospects/new", label: "Add Prospect", icon: UserPlus },
+    { href: "/", label: "Scouting Board", icon: Users },
+    { href: "/mlb", label: "MLB Players", icon: Database },
+    { href: "/compare", label: "Compare", icon: GitCompare },
     { href: "/reports/new", label: "File Field Report", icon: FileEdit },
   ];
 
@@ -40,7 +39,7 @@ export default function Navbar() {
                   Baseball
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">Amateur Scouting & Draft War Room</p>
+              <p className="text-[11px] text-slate-400 font-medium">Professional Player Evaluation</p>
             </div>
           </Link>
 
@@ -70,7 +69,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-3">
             <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300">
               <Calendar className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="font-semibold text-slate-200">2025–2026 Draft Season</span>
+              <span className="font-semibold text-slate-200">Current MLB Season</span>
             </div>
           </div>
         </div>

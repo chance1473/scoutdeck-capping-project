@@ -33,6 +33,9 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
       reports: {
         orderBy: { date: "desc" },
       },
+      statLines: {
+        orderBy: { season: "desc" },
+      },
     },
   });
 
@@ -40,8 +43,12 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
     notFound();
   }
 
-  const isPitcher = ["RHP", "LHP"].includes(prospect.position);
+  const isPitcher = ["P", "SP", "RP", "RHP", "LHP"].includes(prospect.position);
   const ofpInfo = getGradeLabel(prospect.ofpScore);
+  const liveStats = prospect.statLines.map((line) => ({
+    ...line,
+    stats: JSON.parse(line.statsJson) as Record<string, string | number>,
+  }));
 
   // Construct radar metrics
   let radarMetrics: RadarMetric[] = [];
@@ -72,7 +79,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Draft Board</span>
+          <span>Back to Scouting Board</span>
         </Link>
 
         <div className="flex items-center gap-3">
@@ -82,7 +89,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
             className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-sm"
           >
             <FileEdit className="w-3.5 h-3.5" />
-            <span>Log Field Report</span>
+            <span>Log Scouting Report</span>
           </Link>
         </div>
       </div>
@@ -97,7 +104,9 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
                 {prospect.secondaryPosition ? ` / ${prospect.secondaryPosition}` : ""}
               </span>
               <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700">
-                {prospect.schoolType === "HIGH_SCHOOL" ? "High School" : "College"} &bull; Class of &apos;{prospect.gradYear.toString().slice(2)}
+                {prospect.schoolType === "PROFESSIONAL"
+                  ? `${prospect.currentTeamName || prospect.school} · ${prospect.rosterStatus || "MLB roster"}`
+                  : `${prospect.schoolType === "HIGH_SCHOOL" ? "High School" : "College"} · Class of '${prospect.gradYear.toString().slice(2)}`}
               </span>
               {prospect.status && (
                 <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-emerald-400 text-xs font-bold border border-slate-700">
@@ -111,7 +120,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 mt-2 font-medium">
               <span className="flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-slate-500" />
-                {prospect.school}
+                {prospect.currentTeamName || prospect.school}
               </span>
               <span>&bull;</span>
               <span>B/T: <strong className="text-slate-200 font-mono">{prospect.bats}/{prospect.throws}</strong></span>
@@ -129,9 +138,9 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
           {/* Overall Future Potential (OFP) Card */}
           <div className="flex items-center gap-4 bg-slate-950/80 border border-slate-800 rounded-2xl p-4 md:px-6 md:py-4 shadow-inner">
             <div className="text-right">
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Overall Grade (OFP)</div>
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Performance Grade</div>
               <div className="text-xs font-semibold text-emerald-400">{ofpInfo.label}</div>
-              <div className="text-[10px] text-slate-500">20-80 Major League Scale</div>
+              <div className="text-[10px] text-slate-500">Derived from current MLB season stats</div>
             </div>
             <div className={`w-16 h-16 rounded-2xl border-2 flex items-center justify-center text-3xl font-black ${ofpInfo.badgeBg}`}>
               {prospect.ofpScore}
@@ -161,6 +170,38 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
           </p>
         )}
       </div>
+
+      {liveStats.length > 0 && (
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-md space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-sky-400" />
+              <h2 className="text-sm font-bold text-white uppercase tracking-wider">Live MLB Season Statistics</h2>
+            </div>
+            <span className="text-xs text-slate-500">Last synced {prospect.mlbSyncedAt?.toLocaleString()}</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {liveStats.map((line) => {
+              const preferred = line.group.toLowerCase() === "pitching"
+                ? ["wins", "losses", "era", "gamesPlayed", "gamesStarted", "inningsPitched", "strikeOuts", "whip"]
+                : ["gamesPlayed", "atBats", "runs", "hits", "homeRuns", "rbi", "avg", "ops"];
+              return (
+                <div key={line.id} className="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+                  <h3 className="font-bold capitalize text-emerald-400">{line.season} {line.group}</h3>
+                  <div className="grid grid-cols-4 gap-3 mt-3">
+                    {preferred.filter((key) => line.stats[key] !== undefined).map((key) => (
+                      <div key={key}>
+                        <div className="text-[9px] text-slate-500 uppercase truncate">{key.replace(/([A-Z])/g, " $1")}</div>
+                        <div className="text-lg font-black text-white">{String(line.stats[key])}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Grid: 20-80 Tool Radar Chart + Tool Grades Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -228,14 +269,14 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
         </div>
       </div>
 
-      {/* Statcast & Showcase Metrics Bar */}
+      {/* Private professional evaluation metrics */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-md space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-emerald-400" />
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Statcast & Showcase Combine Metrics</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Professional Evaluation Metrics</h2>
           </div>
-          <span className="text-xs text-slate-500 font-mono">Verified Trackman / Laser Times</span>
+          <span className="text-xs text-slate-500 font-mono">Scout-entered measurements</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">

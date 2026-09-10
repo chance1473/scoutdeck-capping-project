@@ -82,8 +82,8 @@ export default function CompareClient({
     );
   }
 
-  const isPitcherA = ["RHP", "LHP"].includes(playerA.position);
-  const isPitcherB = ["RHP", "LHP"].includes(playerB.position);
+  const isPitcherA = ["P", "SP", "RP", "RHP", "LHP"].includes(playerA.position);
+  const isPitcherB = ["P", "SP", "RP", "RHP", "LHP"].includes(playerB.position);
   const bothPitchers = isPitcherA && isPitcherB;
   const bothHitters = !isPitcherA && !isPitcherB;
 

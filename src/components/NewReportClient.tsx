@@ -35,7 +35,7 @@ export default function NewReportClient({
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Prospect</span>
+          <span>Back to Player</span>
         </Link>
         <div className="text-xs text-slate-400">Field Report Logger</div>
       </div>
@@ -47,7 +47,7 @@ export default function NewReportClient({
             <h1 className="text-2xl font-black text-white tracking-tight">File In-Person Scouting Report</h1>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Log tournament observation notes, tools evaluation, strengths, and areas for development.
+            Record professional game observations, tool evaluations, strengths, and areas for development.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export default function NewReportClient({
           {/* Prospect Selection */}
           <div>
             <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-              Select Prospect <span className="text-rose-400">*</span>
+              Select MLB Player <span className="text-rose-400">*</span>
             </label>
             <select
               name="prospectId"
@@ -89,13 +89,13 @@ export default function NewReportClient({
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Event / Showcase Name <span className="text-rose-400">*</span>
+                Game / Series <span className="text-rose-400">*</span>
               </label>
               <input
                 type="text"
                 name="eventName"
                 required
-                placeholder="e.g. Area Code Games / WWBA Championship"
+                placeholder="e.g. Yankees at Red Sox / September series"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
