@@ -8,7 +8,8 @@ import {
   GitCompare, 
   UserPlus, 
   FileEdit,
-  Activity
+  Activity,
+  Calendar
 } from "lucide-react";
 
 export default function Navbar() {
@@ -65,14 +66,11 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Live Pipeline Status indicator */}
+          {/* Draft Season indicator */}
           <div className="flex items-center space-x-3">
             <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="font-medium text-slate-400">Passo Test Bed Active</span>
+              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-semibold text-slate-200">2025–2026 Draft Season</span>
             </div>
           </div>
         </div>
