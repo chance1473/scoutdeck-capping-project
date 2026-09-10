@@ -228,3 +228,15 @@ export async function syncMlbTeamRosterAction(formData: FormData) {
   revalidatePath("/mlb");
   redirect("/");
 }
+
+export async function clearImportedMlbPlayersAction() {
+  await prisma.prospect.deleteMany({
+    where: { mlbId: { not: null } },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/mlb");
+  revalidatePath("/compare");
+  revalidatePath("/reports/new");
+  redirect("/mlb?cleared=true");
+}

@@ -3,11 +3,12 @@ import { Database, RefreshCw, Search, ShieldCheck, Users } from "lucide-react";
 import { importMlbPlayerAction, syncMlbTeamRosterAction } from "@/app/actions";
 import { getMlbRoster, getMlbTeams, searchMlbPlayers } from "@/lib/mlb";
 import { prisma } from "@/lib/prisma";
+import ClearImportedPlayersButton from "@/components/ClearImportedPlayersButton";
 
 export const dynamic = "force-dynamic";
 
-export default async function MlbPlayersPage({ searchParams }: { searchParams: Promise<{ team?: string; player?: string }> }) {
-  const { team, player } = await searchParams;
+export default async function MlbPlayersPage({ searchParams }: { searchParams: Promise<{ team?: string; player?: string; cleared?: string }> }) {
+  const { team, player, cleared } = await searchParams;
   const teams = await getMlbTeams();
   const requestedId = Number(team);
   const selectedTeam = teams.find((item) => item.id === requestedId) || teams[0];
@@ -23,6 +24,7 @@ export default async function MlbPlayersPage({ searchParams }: { searchParams: P
     select: { id: true, mlbId: true },
   });
   const importedByMlbId = new Map(imported.map((player) => [player.mlbId, player.id]));
+  const importedPlayerCount = await prisma.prospect.count({ where: { mlbId: { not: null } } });
 
   return (
     <div className="space-y-6">
@@ -34,10 +36,19 @@ export default async function MlbPlayersPage({ searchParams }: { searchParams: P
           <h1 className="text-3xl font-black text-white mt-2">Live MLB Player Directory</h1>
           <p className="text-sm text-slate-400 mt-1">Browse a current 40-man roster and bring players into ScoutDeck for private evaluation.</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" /> External data is validated server-side
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> External data is validated server-side
+          </div>
+          <ClearImportedPlayersButton count={importedPlayerCount} />
         </div>
       </div>
+
+      {cleared === "true" && (
+        <div className="rounded-xl border border-emerald-900/60 bg-emerald-950/30 px-4 py-3 text-sm font-semibold text-emerald-300">
+          Imported MLB players, synchronized statistics, and attached reports were cleared.
+        </div>
+      )}
 
       <form className="bg-gradient-to-r from-emerald-950/40 to-slate-900 border border-emerald-900/60 rounded-2xl p-5">
         {selectedTeam && <input type="hidden" name="team" value={selectedTeam.id} />}
