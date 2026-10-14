@@ -23,7 +23,7 @@
 
 * **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Actions, TypeScript)
 * **Styling:** [Tailwind CSS](https://tailwindcss.com/) with custom sports-analytics slate/navy palette
-* **Database & ORM:** [Prisma ORM](https://www.prisma.io/) with SQLite (`prisma/dev.db`)
+* **Database & ORM:** [Prisma ORM](https://www.prisma.io/) with PostgreSQL
 * **Validation:** [Zod](https://zod.dev/) schemas for server-side payload validation
 * **Icons:** [Lucide React](https://lucide.dev/)
 
@@ -36,20 +36,23 @@
 npm install
 ```
 
-### 2. Initialize the Database
+### 2. Configure the environment
 ```bash
-# Push schema to SQLite database
-npx prisma db push
-
-# The seed task adds no fictional players; use /mlb to sync live rosters
-npm run prisma:seed
+cp .env.example .env
 ```
+Set `POSTGRES_PASSWORD`, `DATABASE_URL`, and `SCOUTDECK_ACCESS_SECRET` before starting. The writer secret is required to create prospects, file reports, import MLB players, or clear imported players. Sign in at `/access`.
 
-### 3. Start Local Development Server
+### 3. Start PostgreSQL and the app
 ```bash
+docker compose up --build
+```
+The app container applies the Prisma schema to PostgreSQL on startup. For a local process instead of the app container, start only the database and then run:
+```bash
+npx prisma db push
+npm run prisma:seed
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000). A health check is available at `/api/health`.
 
 ---
 
@@ -59,4 +62,4 @@ This repository is designed as an authentic, high-quality test bed application f
 * **Static Application Security Testing (SAST):** Evaluates how Passo scans modern Next.js 15 Server Actions, dynamic routes, file system access, and input validation schemas.
 * **Software Composition Analysis (SCA):** Tests Passo's dependency auditor against npm ecosystem packages and lockfile resolutions.
 * **Secret Detection:** Exercises Passo's ability to verify absence of hardcoded tokens, sensitive database credentials, and webhook endpoints.
-* **Deployment Gates & Board OS:** Provides realistic production infrastructure targets (e.g. Dockerizing or cloud migration from SQLite to PostgreSQL) to evaluate deployment gates and remediation workflows.
+* **Deployment Gates & Board OS:** Runs from the Docker Compose PostgreSQL deployment so deployment gates and remediation workflows have a production-shaped target.

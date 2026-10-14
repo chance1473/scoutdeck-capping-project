@@ -7,6 +7,7 @@ import { z } from "zod";
 import { calculateHitterOFP, calculatePitcherOFP } from "@/lib/scouting";
 import { getMlbPlayer, getMlbRoster } from "@/lib/mlb";
 import { calculatePerformanceGrade } from "@/lib/performance";
+import { requireWriter } from "@/lib/access";
 
 const ProspectSchema = z.object({
   name: z.string().min(2, "Player name is required"),
@@ -60,6 +61,7 @@ const ProspectSchema = z.object({
 });
 
 export async function createProspectAction(formData: FormData) {
+  await requireWriter();
   const rawData: Record<string, any> = {};
   formData.forEach((val, key) => {
     if (val !== "") {
@@ -118,6 +120,7 @@ const ReportSchema = z.object({
 });
 
 export async function createReportAction(formData: FormData) {
+  await requireWriter();
   const rawData: Record<string, any> = {};
   formData.forEach((val, key) => {
     if (val !== "") {
@@ -202,6 +205,7 @@ async function syncMlbPlayerRecord(mlbId: number, rosterStatus?: string, fallbac
 }
 
 export async function importMlbPlayerAction(formData: FormData) {
+  await requireWriter();
   const input = MlbImportSchema.parse({
     mlbId: formData.get("mlbId"),
     rosterStatus: formData.get("rosterStatus") || undefined,
@@ -214,6 +218,7 @@ export async function importMlbPlayerAction(formData: FormData) {
 }
 
 export async function syncMlbTeamRosterAction(formData: FormData) {
+  await requireWriter();
   const teamId = z.coerce.number().int().positive().parse(formData.get("teamId"));
   const teamName = z.string().min(1).max(100).parse(formData.get("teamName"));
   const roster = await getMlbRoster(teamId);
@@ -230,6 +235,7 @@ export async function syncMlbTeamRosterAction(formData: FormData) {
 }
 
 export async function clearImportedMlbPlayersAction() {
+  await requireWriter();
   await prisma.prospect.deleteMany({
     where: { mlbId: { not: null } },
   });
