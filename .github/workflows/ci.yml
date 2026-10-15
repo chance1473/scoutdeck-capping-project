@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    env:
+      # Pages that query the database are force-dynamic, so the build never connects.
+      # A placeholder keeps Prisma's env("DATABASE_URL") resolvable if that changes.
+      DATABASE_URL: postgresql://ci-placeholder:ci-placeholder@localhost:5432/ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
+  compose-and-image:
+    name: Validate compose and Docker image
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_USER: ci-placeholder
+      POSTGRES_PASSWORD: ci-placeholder
+      POSTGRES_DB: ci-placeholder
+      DATABASE_URL: postgresql://ci-placeholder:ci-placeholder@db:5432/ci-placeholder
+      SCOUTDECK_ACCESS_SECRET: ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml
+        run: docker compose config --quiet
+
+      - name: Build app image
+        run: docker build -t scoutdeck-ci .
