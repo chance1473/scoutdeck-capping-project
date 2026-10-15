@@ -16,10 +16,8 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    env:
-      # Pages that query the database are force-dynamic, so the build never connects.
-      # A placeholder keeps Prisma's env("DATABASE_URL") resolvable if that changes.
-      DATABASE_URL: postgresql://ci-placeholder:ci-placeholder@localhost:5432/ci-placeholder
+    # No DATABASE_URL: pages that query the database are force-dynamic, so
+    # neither the build nor the unit tests connect. Never inline credentials here.
     steps:
       - uses: actions/checkout@v4
 
@@ -37,12 +35,7 @@ jobs:
   compose-and-image:
     name: Validate compose and Docker image
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_USER: ci-placeholder
-      POSTGRES_PASSWORD: ci-placeholder
-      POSTGRES_DB: ci-placeholder
-      DATABASE_URL: postgresql://ci-placeholder:ci-placeholder@db:5432/ci-placeholder
-      SCOUTDECK_ACCESS_SECRET: ci-placeholder
+    # docker-compose.yml only passes variables through, so validation needs none.
     steps:
       - uses: actions/checkout@v4
 

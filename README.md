@@ -54,7 +54,7 @@ npx prisma db push
 npm run prisma:seed
 npm run dev
 ```
-Inside Docker Compose the app reaches PostgreSQL at host `db`, so `DATABASE_URL` takes the form `postgresql://<user>:<password>@db:5432/<db>`. For a local process, use `localhost` instead of `db`.
+Inside Docker Compose the app reaches PostgreSQL at host `db`, so the host in `DATABASE_URL` must be `db` (port `5432`). For a local process, use `localhost` instead of `db`. Put the full value only in your uncommitted `.env` (see `.env.example`).
 
 Open [http://localhost:3000](http://localhost:3000).
 
