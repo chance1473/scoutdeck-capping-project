@@ -17,7 +17,7 @@
 * **Professional Observation Logs:** Chronological reports with narrative summaries, strengths, weaknesses, grades, and film links.
 * **Printable Scouting Dossier:** Built-in print media layout to export clean, single-sheet scouting cards.
 
-See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) for the requirement-to-code and verification map.
+See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) for the requirement-to-code and verification map, [docs/INTERFACES.md](docs/INTERFACES.md) for integration boundaries, and [docs/OWNERSHIP.md](docs/OWNERSHIP.md) for accounts and network paths. To report a bug or ask for help, see [SUPPORT.md](SUPPORT.md).
 
 ---
 

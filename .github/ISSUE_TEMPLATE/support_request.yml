@@ -1,0 +1,25 @@
+name: Support request
+description: Help using or running ScoutDeck, or a change you need.
+labels: [support]
+assignees: [chance1473]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What you are trying to do and anything you have already tried.
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      options:
+        - Whenever possible
+        - Blocks my scouting work
+    validations:
+      required: true

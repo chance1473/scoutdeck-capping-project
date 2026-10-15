@@ -1,0 +1,42 @@
+name: Bug report
+description: Something in ScoutDeck is broken or wrong.
+labels: [bug]
+assignees: [chance1473]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Page or command
+      placeholder: e.g. /mlb, /reports/new, docker compose up
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - Minor, there is a workaround
+        - Blocks scouting work
+        - Blocks a release
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error messages or logs
+      description: Remove any secrets, passwords or connection strings first.
+      render: text
