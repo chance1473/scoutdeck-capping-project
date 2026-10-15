@@ -17,6 +17,8 @@
 * **Professional Observation Logs:** Chronological reports with narrative summaries, strengths, weaknesses, grades, and film links.
 * **Printable Scouting Dossier:** Built-in print media layout to export clean, single-sheet scouting cards.
 
+See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) for the requirement-to-code and verification map.
+
 ---
 
 ## 🛠️ Architecture & Tech Stack
