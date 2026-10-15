@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { CLEAR_IMPORTED_CONFIRMATION, GRADE_MAX, GRADE_MIN, WEIGHT_MAX, WEIGHT_MIN } from "./limits.ts";
+import { RECRUIT_STATUSES } from "./scouting.ts";
 
 const grade = () => z.coerce.number().min(GRADE_MIN).max(GRADE_MAX);
+
+type RecruitStatus = (typeof RECRUIT_STATUSES)[number]["id"];
+const RECRUIT_STATUS_IDS = RECRUIT_STATUSES.map((status) => status.id) as [RecruitStatus, ...RecruitStatus[]];
 
 export const ProspectSchema = z.object({
   name: z.string().min(2, "Player name is required"),
@@ -14,7 +18,7 @@ export const ProspectSchema = z.object({
   school: z.string().min(2, "School / Team is required"),
   schoolType: z.enum(["HIGH_SCHOOL", "COLLEGE"]),
   gradYear: z.coerce.number().min(2024).max(2030),
-  status: z.string().default("WATCHLIST"),
+  status: z.enum(RECRUIT_STATUS_IDS).default("WATCHLIST"),
   commitment: z.string().optional().nullable(),
   draftProjection: z.string().optional().nullable(),
   proComp: z.string().optional().nullable(),
@@ -53,6 +57,72 @@ export const ProspectSchema = z.object({
   commandPresent: grade().optional().nullable(),
   commandFuture: grade().optional().nullable(),
 });
+
+export type ProspectInput = z.infer<typeof ProspectSchema>;
+
+/**
+ * Columns a writer may set on a hand-entered prospect, listed one by one.
+ * MLB identity, sync and data-source columns are fixed here and never read
+ * from the form; add a new form field here explicitly or it is dropped.
+ */
+export function toProspectCreateData(data: ProspectInput, ofpScore: number) {
+  return {
+    name: data.name,
+    position: data.position,
+    secondaryPosition: data.secondaryPosition ?? null,
+    bats: data.bats,
+    throws: data.throws,
+    height: data.height,
+    weight: data.weight,
+    school: data.school,
+    schoolType: data.schoolType,
+    gradYear: data.gradYear,
+    status: data.status,
+    commitment: data.commitment ?? null,
+    draftProjection: data.draftProjection ?? null,
+    proComp: data.proComp ?? null,
+    summary: data.summary ?? null,
+    tags: data.tags ?? null,
+
+    exitVelocityMax: data.exitVelocityMax ?? null,
+    sixtyTime: data.sixtyTime ?? null,
+    popTime: data.popTime ?? null,
+    fastballVeloPeak: data.fastballVeloPeak ?? null,
+    fastballVeloSit: data.fastballVeloSit ?? null,
+    spinRate: data.spinRate ?? null,
+
+    hitPresent: data.hitPresent,
+    hitFuture: data.hitFuture,
+    powerPresent: data.powerPresent,
+    powerFuture: data.powerFuture,
+    runPresent: data.runPresent,
+    runFuture: data.runFuture,
+    armPresent: data.armPresent,
+    armFuture: data.armFuture,
+    fieldPresent: data.fieldPresent,
+    fieldFuture: data.fieldFuture,
+
+    fastballPresent: data.fastballPresent ?? null,
+    fastballFuture: data.fastballFuture ?? null,
+    sliderPresent: data.sliderPresent ?? null,
+    sliderFuture: data.sliderFuture ?? null,
+    curveballPresent: data.curveballPresent ?? null,
+    curveballFuture: data.curveballFuture ?? null,
+    changeupPresent: data.changeupPresent ?? null,
+    changeupFuture: data.changeupFuture ?? null,
+    commandPresent: data.commandPresent ?? null,
+    commandFuture: data.commandFuture ?? null,
+
+    ofpScore,
+    mlbId: null,
+    currentTeamId: null,
+    currentTeamName: null,
+    rosterStatus: null,
+    active: false,
+    dataSource: "SCOUTDECK",
+    mlbSyncedAt: null,
+  };
+}
 
 export const ReportSchema = z.object({
   prospectId: z.string().min(1, "Prospect ID is required"),

@@ -8,7 +8,7 @@ import { calculateHitterOFP, calculatePitcherOFP } from "@/lib/scouting";
 import { getMlbPlayer, getMlbRoster } from "@/lib/mlb";
 import { calculatePerformanceGrade } from "@/lib/performance";
 import { requireWriter } from "@/lib/access";
-import { ClearImportedSchema, ProspectSchema, ReportSchema } from "@/lib/validation";
+import { ClearImportedSchema, ProspectSchema, ReportSchema, toProspectCreateData } from "@/lib/validation";
 
 export async function createProspectAction(formData: FormData) {
   await requireWriter();
@@ -46,10 +46,7 @@ export async function createProspectAction(formData: FormData) {
   }
 
   const newProspect = await prisma.prospect.create({
-    data: {
-      ...data,
-      ofpScore: calculatedOfp,
-    },
+    data: toProspectCreateData(data, calculatedOfp),
   });
 
   revalidatePath("/");
