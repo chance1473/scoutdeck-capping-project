@@ -34,3 +34,14 @@ export function writerTokenMatches(
   if (expected.length !== actual.length) return false;
   return timingSafeEqual(expected, actual);
 }
+
+export type WriterAccessDecision = "allow" | "sign_in" | "unconfigured";
+
+export function writerAccessDecision(
+  secret: string | undefined,
+  token: string | undefined,
+  now: number = Date.now(),
+): WriterAccessDecision {
+  if (!secret) return "unconfigured";
+  return writerTokenMatches(secret, token, now) ? "allow" : "sign_in";
+}

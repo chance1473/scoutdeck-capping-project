@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { writerTokenMatches } from "@/lib/writer-token";
+import { type WriterAccessDecision, writerAccessDecision } from "@/lib/writer-token";
 
 export const WRITER_COOKIE = "scoutdeck_writer";
 
@@ -11,11 +11,13 @@ export class WriterAccessError extends Error {
   }
 }
 
-export async function isWriter(): Promise<boolean> {
-  const secret = process.env.SCOUTDECK_ACCESS_SECRET;
-  if (!secret) return false;
+async function currentDecision(): Promise<WriterAccessDecision> {
   const jar = await cookies();
-  return writerTokenMatches(secret, jar.get(WRITER_COOKIE)?.value);
+  return writerAccessDecision(process.env.SCOUTDECK_ACCESS_SECRET, jar.get(WRITER_COOKIE)?.value);
+}
+
+export async function isWriter(): Promise<boolean> {
+  return (await currentDecision()) === "allow";
 }
 
 /**
@@ -25,10 +27,11 @@ export async function isWriter(): Promise<boolean> {
  * fails closed with an error instead.
  */
 export async function requireWriter(): Promise<void> {
-  if (!process.env.SCOUTDECK_ACCESS_SECRET) {
+  const decision = await currentDecision();
+  if (decision === "unconfigured") {
     throw new WriterAccessError("Writer access is not configured: SCOUTDECK_ACCESS_SECRET is unset.");
   }
-  if (!(await isWriter())) {
+  if (decision !== "allow") {
     redirect("/access");
   }
 }
