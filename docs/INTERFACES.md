@@ -14,6 +14,8 @@ Owner of every boundary: the repository owner, GitHub account `chance1473`.
 | App to MLB Stats API (`src/lib/mlb.ts`) | Outbound, public HTTPS | None; public read-only API at `statsapi.mlb.com` | Teams, 40-man rosters, player bio and season stats; nothing is sent except ids and search names | Zod schemas for teams, people and roster entries; responses that break them are rejected before any write | 10-second timeout; non-2xx, timeout and network failures raise named errors; results are cached 5 minutes to 24 hours |
 | Operator to the app container | Inbound, administrative | Shell access to the host running Docker Compose | Environment variables | `docker-compose.yml`, `.env.example` | Compose healthchecks on `db` and `app` |
 
+Accounts, administrative access and network exposure are covered in [OWNERSHIP.md](OWNERSHIP.md).
+
 ## Verification
 
 - `npm test` runs `tests/mlb.test.ts`, which stubs `fetch` and checks the MLB request URL and timeout signal, the 503 path, a contract-breaking payload, timeout and network errors, and the short-query guard.
