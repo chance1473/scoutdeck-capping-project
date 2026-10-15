@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { WRITER_COOKIE } from "@/lib/access";
-import { secretMatches, writerToken } from "@/lib/writer-token";
+import { WRITER_SESSION_MAX_AGE_SECONDS, secretMatches, writerToken } from "@/lib/writer-token";
 
 export async function signInAction(formData: FormData) {
   const secret = process.env.SCOUTDECK_ACCESS_SECRET;
@@ -18,6 +18,7 @@ export async function signInAction(formData: FormData) {
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
+    maxAge: WRITER_SESSION_MAX_AGE_SECONDS,
   });
   redirect("/");
 }

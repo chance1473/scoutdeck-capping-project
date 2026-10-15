@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { GRADE_MAX, GRADE_MIN } from "../src/lib/limits.ts";
-import { ProspectSchema, ReportSchema } from "../src/lib/validation.ts";
+import { ClearImportedSchema, ProspectSchema, ReportSchema } from "../src/lib/validation.ts";
 
 const prospect = {
   name: "Test Player",
@@ -36,6 +36,13 @@ test("prospect tool grades are held to the 20-80 scale", () => {
   assert.equal(ProspectSchema.safeParse({ ...prospect, hitFuture: "95" }).success, false);
   assert.equal(ProspectSchema.safeParse({ ...prospect, armPresent: "10" }).success, false);
   assert.equal(ProspectSchema.safeParse({ ...prospect, fastballFuture: "120" }).success, false);
+});
+
+test("clearing imported players requires the exact confirmation word", () => {
+  assert.equal(ClearImportedSchema.safeParse({ confirm: "CLEAR" }).success, true);
+  assert.equal(ClearImportedSchema.safeParse({ confirm: "clear" }).success, false);
+  assert.equal(ClearImportedSchema.safeParse({ confirm: "" }).success, false);
+  assert.equal(ClearImportedSchema.safeParse({ confirm: null }).success, false);
 });
 
 test("prospect weight is held to 100-350", () => {

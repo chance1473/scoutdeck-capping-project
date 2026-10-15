@@ -8,7 +8,7 @@ import { calculateHitterOFP, calculatePitcherOFP } from "@/lib/scouting";
 import { getMlbPlayer, getMlbRoster } from "@/lib/mlb";
 import { calculatePerformanceGrade } from "@/lib/performance";
 import { requireWriter } from "@/lib/access";
-import { ProspectSchema, ReportSchema } from "@/lib/validation";
+import { ClearImportedSchema, ProspectSchema, ReportSchema } from "@/lib/validation";
 
 export async function createProspectAction(formData: FormData) {
   await requireWriter();
@@ -72,6 +72,14 @@ export async function createReportAction(formData: FormData) {
   }
 
   const data = parsed.data;
+
+  const prospect = await prisma.prospect.findUnique({
+    where: { id: data.prospectId },
+    select: { id: true },
+  });
+  if (!prospect) {
+    throw new Error("Prospect not found");
+  }
 
   await prisma.scoutingReport.create({
     data: {
@@ -172,8 +180,12 @@ export async function syncMlbTeamRosterAction(formData: FormData) {
   redirect("/");
 }
 
-export async function clearImportedMlbPlayersAction() {
+export async function clearImportedMlbPlayersAction(formData: FormData) {
   await requireWriter();
+  const confirmation = ClearImportedSchema.safeParse({ confirm: formData.get("confirm") });
+  if (!confirmation.success) {
+    throw new Error(confirmation.error.errors[0]?.message ?? "Confirmation required");
+  }
   await prisma.prospect.deleteMany({
     where: { mlbId: { not: null } },
   });

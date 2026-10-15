@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GRADE_MAX, GRADE_MIN, WEIGHT_MAX, WEIGHT_MIN } from "./limits.ts";
+import { CLEAR_IMPORTED_CONFIRMATION, GRADE_MAX, GRADE_MIN, WEIGHT_MAX, WEIGHT_MIN } from "./limits.ts";
 
 const grade = () => z.coerce.number().min(GRADE_MIN).max(GRADE_MAX);
 
@@ -64,4 +64,10 @@ export const ReportSchema = z.object({
   weaknesses: z.string().min(3, "Areas for improvement are required"),
   videoUrl: z.string().optional().nullable(),
   grade: grade().optional().nullable(),
+});
+
+export const ClearImportedSchema = z.object({
+  confirm: z.literal(CLEAR_IMPORTED_CONFIRMATION, {
+    errorMap: () => ({ message: `Type ${CLEAR_IMPORTED_CONFIRMATION} to confirm` }),
+  }),
 });
