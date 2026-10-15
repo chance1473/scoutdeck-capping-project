@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --experimental-strip-types --test tests/writer-token.test.ts tests/validation.test.ts tests/performance.test.ts",
+    "test": "node --experimental-strip-types --test tests/writer-token.test.ts tests/validation.test.ts tests/performance.test.ts tests/mlb.test.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",

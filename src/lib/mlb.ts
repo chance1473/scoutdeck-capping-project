@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const MLB_BASE_URL = "https://statsapi.mlb.com/api/v1";
+export const MLB_TIMEOUT_MS = 10_000;
 
 const TeamSchema = z.object({
   id: z.number().int().positive(),
@@ -43,10 +44,19 @@ export type MlbPerson = z.infer<typeof PersonSchema>;
 export type MlbRosterEntry = z.infer<typeof RosterEntrySchema>;
 
 async function mlbFetch(path: string, revalidate = 900): Promise<unknown> {
-  const response = await fetch(`${MLB_BASE_URL}${path}`, {
-    headers: { Accept: "application/json" },
-    next: { revalidate },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${MLB_BASE_URL}${path}`, {
+      headers: { Accept: "application/json" },
+      next: { revalidate },
+      signal: AbortSignal.timeout(MLB_TIMEOUT_MS),
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "TimeoutError") {
+      throw new Error(`MLB data request timed out after ${MLB_TIMEOUT_MS / 1000}s`);
+    }
+    throw new Error("MLB data request could not reach statsapi.mlb.com", { cause: error });
+  }
   if (!response.ok) throw new Error(`MLB data request failed (${response.status})`);
   return response.json();
 }
