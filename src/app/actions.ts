@@ -8,57 +8,7 @@ import { calculateHitterOFP, calculatePitcherOFP } from "@/lib/scouting";
 import { getMlbPlayer, getMlbRoster } from "@/lib/mlb";
 import { calculatePerformanceGrade } from "@/lib/performance";
 import { requireWriter } from "@/lib/access";
-
-const ProspectSchema = z.object({
-  name: z.string().min(2, "Player name is required"),
-  position: z.string().min(1, "Position is required"),
-  secondaryPosition: z.string().optional().nullable(),
-  bats: z.enum(["R", "L", "S"]),
-  throws: z.enum(["R", "L"]),
-  height: z.string().min(2, "Height is required (e.g. 6'2\")"),
-  weight: z.coerce.number().min(100).max(350),
-  school: z.string().min(2, "School / Team is required"),
-  schoolType: z.enum(["HIGH_SCHOOL", "COLLEGE"]),
-  gradYear: z.coerce.number().min(2024).max(2030),
-  status: z.string().default("WATCHLIST"),
-  commitment: z.string().optional().nullable(),
-  draftProjection: z.string().optional().nullable(),
-  proComp: z.string().optional().nullable(),
-  summary: z.string().optional().nullable(),
-  tags: z.string().optional().nullable(),
-
-  // Showcase metrics
-  exitVelocityMax: z.coerce.number().optional().nullable(),
-  sixtyTime: z.coerce.number().optional().nullable(),
-  popTime: z.coerce.number().optional().nullable(),
-  fastballVeloPeak: z.coerce.number().optional().nullable(),
-  fastballVeloSit: z.coerce.number().optional().nullable(),
-  spinRate: z.coerce.number().optional().nullable(),
-
-  // Position Player Tools
-  hitPresent: z.coerce.number().default(30),
-  hitFuture: z.coerce.number().default(50),
-  powerPresent: z.coerce.number().default(30),
-  powerFuture: z.coerce.number().default(50),
-  runPresent: z.coerce.number().default(50),
-  runFuture: z.coerce.number().default(50),
-  armPresent: z.coerce.number().default(50),
-  armFuture: z.coerce.number().default(50),
-  fieldPresent: z.coerce.number().default(45),
-  fieldFuture: z.coerce.number().default(55),
-
-  // Pitcher Tools
-  fastballPresent: z.coerce.number().optional().nullable(),
-  fastballFuture: z.coerce.number().optional().nullable(),
-  sliderPresent: z.coerce.number().optional().nullable(),
-  sliderFuture: z.coerce.number().optional().nullable(),
-  curveballPresent: z.coerce.number().optional().nullable(),
-  curveballFuture: z.coerce.number().optional().nullable(),
-  changeupPresent: z.coerce.number().optional().nullable(),
-  changeupFuture: z.coerce.number().optional().nullable(),
-  commandPresent: z.coerce.number().optional().nullable(),
-  commandFuture: z.coerce.number().optional().nullable(),
-});
+import { ProspectSchema, ReportSchema } from "@/lib/validation";
 
 export async function createProspectAction(formData: FormData) {
   await requireWriter();
@@ -106,18 +56,6 @@ export async function createProspectAction(formData: FormData) {
   revalidatePath("/compare");
   redirect(`/prospects/${newProspect.id}`);
 }
-
-const ReportSchema = z.object({
-  prospectId: z.string().min(1, "Prospect ID is required"),
-  scoutName: z.string().min(2, "Scout name is required"),
-  eventName: z.string().min(2, "Event / Tournament name is required"),
-  date: z.string().default(() => new Date().toISOString()),
-  summary: z.string().min(5, "Scouting summary is required"),
-  strengths: z.string().min(3, "Key strengths are required"),
-  weaknesses: z.string().min(3, "Areas for improvement are required"),
-  videoUrl: z.string().optional().nullable(),
-  grade: z.coerce.number().min(20).max(80).optional().nullable(),
-});
 
 export async function createReportAction(formData: FormData) {
   await requireWriter();

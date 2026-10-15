@@ -52,7 +52,16 @@ npx prisma db push
 npm run prisma:seed
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000). A health check is available at `/api/health`.
+Inside Docker Compose the app reaches PostgreSQL at host `db`, so `DATABASE_URL` takes the form `postgresql://<user>:<password>@db:5432/<db>`. For a local process, use `localhost` instead of `db`.
+
+Open [http://localhost:3000](http://localhost:3000).
+
+### Health and diagnosis
+`GET /api/health` runs `SELECT 1` against PostgreSQL. It returns `200 {"ok":true,"database":"ok"}` when the database answers and `503 {"ok":false,"database":"unreachable"}` when it does not. On a 503, the app logs the Prisma error with a `[health]` prefix:
+```bash
+docker compose logs app | grep -A4 "\[health\]"
+```
+The app reconnects on its own once PostgreSQL is back; no app restart is needed.
 
 ---
 

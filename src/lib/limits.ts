@@ -1,7 +1,6 @@
 /**
- * Numeric bounds already enforced elsewhere.
- * Prospect weight and report grade are validated by Zod in server actions.
- * This module only names those limits; it is not a second schema.
+ * Numeric bounds for prospect and report input.
+ * The Zod schemas in validation.ts enforce these on every server action.
  */
 export const GRADE_MIN = 20;
 export const GRADE_MAX = 80;
