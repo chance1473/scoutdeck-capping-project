@@ -65,6 +65,16 @@ The app reconnects on its own once PostgreSQL is back; no app restart is needed.
 
 ---
 
+## ✅ Continuous integration
+
+The [`CI` workflow](.github/workflows/ci.yml) runs on every pull request and on pushes to `main`:
+* **Build and test:** `npm ci`, `npm run build` (Prisma client generation plus `next build`), and `npm test`, on Node 22.
+* **Validate compose and Docker image:** `docker compose config` with non-secret placeholder environment values, then `docker build .` of the app image.
+
+The workflow uses read-only repository permissions and no repository secrets. The repository owner should protect `main` in GitHub branch protection settings and require the `Build and test` and `Validate compose and Docker image` status checks to pass before merging.
+
+---
+
 ## 🔒 Passo & Cybersecurity Test-Bed Context
 
 This repository is designed as an authentic, high-quality test bed application for evaluating **Passo by PyxCloud**:
