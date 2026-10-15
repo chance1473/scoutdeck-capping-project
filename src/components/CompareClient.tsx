@@ -165,7 +165,7 @@ export default function CompareClient({
           <select
             value={playerAId}
             onChange={(e) => setPlayerAId(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-hidden focus:border-emerald-500 transition-colors"
           >
             {prospects.map((p) => (
               <option key={p.id} value={p.id} disabled={p.id === playerBId}>
@@ -183,7 +183,7 @@ export default function CompareClient({
           <select
             value={playerBId}
             onChange={(e) => setPlayerBId(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-amber-500 transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-hidden focus:border-amber-500 transition-colors"
           >
             {prospects.map((p) => (
               <option key={p.id} value={p.id} disabled={p.id === playerAId}>

@@ -50,7 +50,7 @@ export default async function MlbPlayersPage({ searchParams }: { searchParams: P
         </div>
       )}
 
-      <form className="bg-gradient-to-r from-emerald-950/40 to-slate-900 border border-emerald-900/60 rounded-2xl p-5">
+      <form className="bg-linear-to-r from-emerald-950/40 to-slate-900 border border-emerald-900/60 rounded-2xl p-5">
         {selectedTeam && <input type="hidden" name="team" value={selectedTeam.id} />}
         <label className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Find a specific MLB player</label>
         <div className="flex flex-col sm:flex-row gap-3 mt-2">

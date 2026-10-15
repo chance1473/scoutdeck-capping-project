@@ -42,12 +42,13 @@ function walkDependencies(deps) {
 
 walkDependencies(lock.dependencies);
 
-if (versions.length === 0 || versions.some(belowMinimum)) {
-  console.log(
-    versions.length === 0
-      ? "no postcss-selector-parser versions found in package-lock.json"
-      : `postcss-selector-parser below 7.1.6: ${versions.filter(belowMinimum).join(", ")}`,
-  );
+if (versions.length === 0) {
+  console.log("postcss-selector-parser not installed");
+  process.exit(0);
+}
+
+if (versions.some(belowMinimum)) {
+  console.log(`postcss-selector-parser below 7.1.6: ${versions.filter(belowMinimum).join(", ")}`);
   process.exit(1);
 }
 

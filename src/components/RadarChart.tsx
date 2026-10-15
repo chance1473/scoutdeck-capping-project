@@ -225,7 +225,7 @@ export default function RadarChart({
                 </div>
               )}
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-emerald-500"></span>
+                <span className="w-3 h-3 rounded-xs bg-emerald-500"></span>
                 <span className="text-emerald-300">Future (Projected) Grade</span>
               </div>
               <div className="flex items-center gap-1.5">

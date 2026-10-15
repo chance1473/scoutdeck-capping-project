@@ -86,7 +86,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
           <PrintButton />
           <Link
             href={`/reports/new?prospectId=${prospect.id}`}
-            className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-sm"
+            className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-xs"
           >
             <FileEdit className="w-3.5 h-3.5" />
             <span>Log Scouting Report</span>
@@ -231,7 +231,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
               return (
                 <div
                   key={tool.name}
-                  className="bg-slate-900/80 border border-slate-800/90 rounded-xl p-3.5 shadow-sm space-y-2"
+                  className="bg-slate-900/80 border border-slate-800/90 rounded-xl p-3.5 shadow-xs space-y-2"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-sm text-slate-200">{tool.name}</span>
@@ -241,7 +241,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
                           P: {tool.present}
                         </span>
                       )}
-                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${futureInfo.badgeBg}`} title="Future Grade">
+                      <span className={`px-2 py-0.5 rounded-sm text-xs font-bold ${futureInfo.badgeBg}`} title="Future Grade">
                         F: {tool.future}
                       </span>
                     </div>
@@ -253,7 +253,7 @@ export default async function ProspectDetailPage({ params }: ProspectPageProps) 
                     <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-sky-500/50 z-10" title="50 = MLB Avg" />
                     {/* Bar */}
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-600 to-teal-400 rounded-full"
+                      className="h-full bg-linear-to-r from-emerald-600 to-teal-400 rounded-full"
                       style={{ width: `${((tool.future - 20) / 60) * 100}%` }}
                     />
                   </div>

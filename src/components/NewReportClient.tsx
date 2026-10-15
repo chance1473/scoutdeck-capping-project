@@ -62,7 +62,7 @@ export default function NewReportClient({
               value={selectedProspectId}
               onChange={(e) => setSelectedProspectId(e.target.value)}
               required
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white font-semibold focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-white font-semibold focus:outline-hidden focus:border-emerald-500"
             >
               {prospects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -83,7 +83,7 @@ export default function NewReportClient({
                 required
                 defaultValue="David Vance (National Crosschecker)"
                 placeholder="e.g. Mike Callahan (West Coast Scout)"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
@@ -96,7 +96,7 @@ export default function NewReportClient({
                 name="eventName"
                 required
                 placeholder="e.g. Yankees at Red Sox / September series"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
               />
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function NewReportClient({
                 type="date"
                 name="date"
                 defaultValue={new Date().toISOString().split("T")[0]}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
@@ -127,7 +127,7 @@ export default function NewReportClient({
                   onChange={(e) => setGrade(Number(e.target.value))}
                   className="flex-1 accent-emerald-400"
                 />
-                <span className="w-12 text-center px-2 py-1 rounded bg-slate-950 border border-slate-800 text-emerald-400 font-mono font-bold text-sm">
+                <span className="w-12 text-center px-2 py-1 rounded-sm bg-slate-950 border border-slate-800 text-emerald-400 font-mono font-bold text-sm">
                   {grade}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export default function NewReportClient({
               required
               rows={4}
               placeholder="Describe at-bats, pitching matchups, pitch execution, swing mechanics, and demeanor on the field..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
             />
           </div>
 
@@ -160,7 +160,7 @@ export default function NewReportClient({
                 required
                 rows={3}
                 placeholder="e.g. Plus bat speed, effortless barrel control, quiet hands..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
               />
             </div>
 
@@ -174,7 +174,7 @@ export default function NewReportClient({
                 required
                 rows={3}
                 placeholder="e.g. Tendency to chase elevated breaking balls, footwork at 2B..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
               />
             </div>
           </div>
@@ -186,7 +186,7 @@ export default function NewReportClient({
               type="url"
               name="videoUrl"
               placeholder="https://www.youtube.com/watch?v=... or Hudl link"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-hidden focus:border-emerald-500"
             />
           </div>
 
